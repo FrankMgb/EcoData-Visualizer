@@ -1,0 +1,257 @@
+@startuml Environmental_Dashboard_AWS_Deployment_Simple
+
+title Environmental Dashboard - AWS Deployment Architecture (MVP)
+
+skinparam rectangle {
+
+BackgroundColor LightBlue
+
+BorderColor Blue
+
+}
+
+skinparam database {
+
+BackgroundColor LightYellow
+
+BorderColor Orange
+
+}
+
+skinparam cloud {
+
+BackgroundColor LightGreen
+
+BorderColor Green
+
+}
+
+' === Client Layer ===
+
+actor "End User\n(Web Browser)" as User
+
+' === Frontend Layer ===
+
+rectangle "Frontend Layer" as Frontend {
+
+cloud "Route 53" as Route53 {
+
+[DNS Routing]
+
+}
+
+cloud "CloudFront" as CloudFront {
+
+[CDN Distribution]
+
+}
+
+rectangle "AWS Amplify" as Amplify {
+
+[Hosting Service]
+
+}
+
+storage "S3 Bucket" as S3Frontend {
+
+[dashboard-frontend/\nAngular artifacts]
+
+}
+
+}
+
+' === API & Compute Layer ===
+
+rectangle "API & Compute Layer" as APILayer {
+
+rectangle "API Gateway" as APIGateway {
+
+[REST API\nStage: prod]
+
+}
+
+rectangle "Lambda Functions" as Lambdas {
+
+component [DataProcessorLambda] as DataLambda
+
+component [AIInsightLambda] as AILambda
+
+component [ExportLambda] as ExportLambda
+
+}
+
+}
+
+' === Data & AI Layer ===
+
+rectangle "Data & AI Layer" as DataLayer {
+
+database "DynamoDB" as DynamoDB {
+
+[ClimateDataTable]
+
+[PromptTemplateTable]
+
+}
+
+storage "S3 Bucket" as S3Exports {
+
+[dashboard-exports/\nPNG & CSV files]
+
+}
+
+cloud "Amazon Bedrock" as Bedrock {
+
+[AI Model:\nanthropic.claude-v2]
+
+}
+
+rectangle "CloudWatch" as CloudWatch {
+
+[Logs & Metrics]
+
+}
+
+}
+
+' === Security Layer ===
+
+rectangle "Security & IAM" as Security {
+
+rectangle "IAM Roles" as IAM {
+
+[Lambda Execution Roles]
+
+[S3 Access Policies]
+
+}
+
+rectangle "AWS WAF" as WAF {
+
+[DDoS Protection]
+
+[SQL Injection Filter]
+
+}
+
+}
+
+' === Relationships ===
+
+' Client to Frontend
+
+User --> Route53 : "1. Request\ndashboard.com"
+
+Route53 --> CloudFront : "2. DNS resolves"
+
+CloudFront --> WAF : "3. Security check"
+
+CloudFront --> Amplify : "4. Fetch static assets"
+
+Amplify --> S3Frontend : "5. Serve Angular app"
+
+' Frontend to API
+
+CloudFront --> APIGateway : "6. API calls /api/*\n(HTTPS)"
+
+' API to Lambda
+
+APIGateway --> DataLambda : "Route: /api/metrics"
+
+APIGateway --> AILambda : "Route: /api/insights"
+
+APIGateway --> ExportLambda : "Route: /api/export"
+
+' Lambda to Data
+
+DataLambda --> DynamoDB : "Query climate data"
+
+AILambda --> DynamoDB : "Load prompt templates"
+
+AILambda --> Bedrock : "Invoke AI model"
+
+ExportLambda --> DynamoDB : "Fetch data"
+
+ExportLambda --> S3Exports : "Upload PNG/CSV"
+
+' Monitoring
+
+DataLambda --> CloudWatch : "Log events"
+
+AILambda --> CloudWatch : "Log AI calls"
+
+ExportLambda --> CloudWatch : "Log exports"
+
+APIGateway --> CloudWatch : "Log API requests"
+
+' Security
+
+IAM ..> Lambdas : "grants permissions"
+
+WAF ..> CloudFront : "protects"
+
+' === Notes ===
+
+note right of DynamoDB
+
+Single-table design:
+
+• PK: metricType
+
+• SK: timestamp#region
+
+• GSI: region-timestamp-index
+
+end note
+
+note right of Bedrock
+
+AI Configuration:
+
+• Max tokens: 2048
+
+• Temperature: 0.7
+
+• Async operation (~2-3s)
+
+end note
+
+note right of S3Exports
+
+File naming pattern:
+
+• temperature_1980-2024_global.png
+
+• temperature_data_1980-2024.csv
+
+Pre-signed URLs (1-hour expiry)
+
+end note
+
+note bottom of Security
+
+IAM manages all permissions:
+
+• Lambda execution roles
+
+• S3 read/write policies
+
+• DynamoDB access
+
+No Cognito for MVP (public access)
+
+end note
+
+note top of Frontend
+
+Amplify simplifies hosting:
+
+• Auto-deploy from Git
+
+• Provisions S3 + CloudFront
+
+• Manages SSL certificate
+
+end note
+
+@enduml

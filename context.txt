@@ -1,0 +1,47 @@
+
+-- The Full-Stack Developer Toolkit ---
+
+vite or nextjs, AWS Amplify, AWS Cognito, AWS DynamoDB, AWS API Features, JavaScript, and JIRA
+
+
+
+S3, Cloudfront, Route 53, API gateway, aws lambda, cloudwatch, DynamoDB, IAM, Bedrock, secrest manager, AWS glue (optional), AWS athena, AMAZON quicksight, AWS WAF, github Actions + terraform
+
+ 
+
+Algorithmic design:
+
+data operation AWS lambda uses Pandas/pyarrow or athena SQL for filtering, aggregation , and trend computation, time complexity is O(n) for streaming CSV vs O(q) Athena scan on partitioned data; precompute summaries by metric and region into s3 parquet to reduce cold starts.
+AI insights - Prompt templating stored in DynamoDB; guardrails in Lambda truncate context and append a caveat; include retry with exponential backoff and token caps per request.​
+
+
+AI and industry Standards:
+
+Reproducibility: Store frozen datasets immutably in S3 with Versioning and Object Lock (governance mode) for audit; pin model, prompt version, and dataset version in each returned insight record written to DynamoDB.​
+Transparency/fairness: Display source dataset name, version tag, and computation method from Lambda response; log prompt, model id, and token counts to CloudWatch with PII redaction.​
+Standards influence: Map controls to NIST AI RMF categories (e.g., data quality, explainability) and to ISO/IEC 27001-style controls implemented via IAM, logging, and change management with Terraform.​
+
+
+Security design
+Authentication & authorization:
+Public read via CloudFront; Admin console protected by Amazon Cognito User Pools or an identity provider using OAuth/OIDC; API Gateway authorizers enforce scopes for admin routes; apply fine-grained IAM to S3 prefixes and DynamoDB items where feasible.​
+Data security:
+S3 default encryption (SSE-S3 or SSE-KMS), bucket policies deny public except through CloudFront OAC; DynamoDB encryption at rest; TLS in transit; presigned S3 URLs for limited-time uploads/downloads; Secrets Manager rotation for external API keys.​
+Model security:
+Bedrock reduces key exfil risk; if using OpenAI, keep keys only server-side in Secrets Manager and never expose to client; input/output size limits and toxicity filters where available; log prompts sans user-identifying data.​
+Network security:
+Prefer public serverless with WAF; if needed, place Athena/Glue in private subnets with VPC endpoints for S3/Secrets; block egress except required endpoints using VPC endpoints plus policies.​
+Incident response:
+CloudWatch Alarms to SNS for spikes in 4XX/5XX, WAF blocks, or error logs; runbooks in Systems Manager Documents; versioned rollbacks via Terraform and S3 object versions; access logs via CloudFront and S3 Server Access Logging for forensics.
+Deployment and operations
+Environments: dev, stage, prod with separate AWS accounts or prefixes; Terraform workspaces; tagged resources for cost allocation and AWS Budgets alerts; CloudWatch dashboards per metric.​
+CI/CD steps: lint/test, build UI, upload to S3, cache-busting invalidation, terraform plan/apply, run post-deploy health checks via API Gateway Stage Variables and canaries in CloudWatch Synthetics.​
+Concrete API outline
+GET /metrics/{metric}?start=YYYY&end=YYYY&region=global → Lambda queries Athena or S3, returns series and summary stats; response includes datasetVersion and computationVersion.​
+POST /insight → body includes metric summary; Lambda fetches prompt template from DynamoDB, calls Bedrock/OpenAI, returns short explanation with modelId and promptVersion.​
+Admin: POST /admin/upload-url, POST /admin/finalize, POST /admin/prompts, GET /admin/datasets; all require Cognito JWT and API key usage plan.​
+
+What to include in your report
+Diagram set updated with specific AWS logos and flows from the above; a data flow showing “Admin upload → Step Functions QA → Frozen S3 → DynamoDB tag → API Gateway/Lambda → UI via CloudFront”; a security table that maps each NIST CSF function to the exact AWS control used; and runtime analysis comparing Lambda+Pandas vs Athena partitioned scans for your data sizes.
+
+
