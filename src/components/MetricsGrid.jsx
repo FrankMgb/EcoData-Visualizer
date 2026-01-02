@@ -1,95 +1,42 @@
-import React from 'react';
-import { Thermometer, Cloud, Droplets, Wind } from 'lucide-react';
+const metrics = [
+  { label: 'Temperature', value: '+1.5°C', change: 'Since 1880', color: 'from-orange-500/20 to-red-500/20' },
+  { label: 'Carbon Dioxide', value: '420 ppm', change: 'Highest in 2M years', color: 'from-gray-500/20 to-gray-700/20' },
+  { label: 'Sea Level', value: '+4 inches', change: 'Since 1993', color: 'from-blue-500/20 to-cyan-500/20' },
+  { label: 'Ice Sheets', value: '427 Gt', change: 'Lost per year', color: 'from-cyan-500/20 to-blue-700/20' },
+];
 
 const MetricsGrid = () => {
-    const metrics = [
-        {
-            icon: <Thermometer size={24} />,
-            title: "Global Temperature",
-            value: "+1.1°C",
-            desc: "Rise in global average temperature since pre-industrial levels."
-        },
-        {
-            icon: <Cloud size={24} />,
-            title: "CO2 Levels",
-            value: "419 ppm",
-            desc: "Current concentration of carbon dioxide in the atmosphere."
-        },
-        {
-            icon: <Droplets size={24} />,
-            title: "Sea Level Rise",
-            value: "3.4 mm/yr",
-            desc: "Average rate of global sea level rise over the past decade."
-        },
-        {
-            icon: <Wind size={24} />,
-            title: "Methane Emissions",
-            value: "1900 ppb",
-            desc: "Atmospheric methane levels reaching record highs."
-        }
-    ];
+  return (
+    <section id="data-metrics" className="py-24 px-6 max-w-7xl mx-auto">
+      <div className="text-center mb-16 space-y-4">
+        <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+          Core Climate Indicators
+        </h2>
+        <p className="text-gray-400">
+          Track the vital metrics related to climate health
+        </p>
+      </div>
 
-    return (
-        <section className="metrics-section" id="metrics">
-            <div className="container">
-                <div className="section-header">
-                    <h2>Understand Your Metrics</h2>
-                    <p>Track the vital signs of our planet with real-time data updates.</p>
-                </div>
-
-                <div className="metrics-grid">
-                    {metrics.map((metric, index) => (
-                        <div key={index} className="card metric-card">
-                            <div className="metric-icon">{metric.icon}</div>
-                            <div className="metric-content">
-                                <h3>{metric.title}</h3>
-                                <div className="metric-value">{metric.value}</div>
-                                <p>{metric.desc}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {metrics.map((metric, idx) => (
+          <div
+            key={idx}
+            className={`group p-6 rounded-2xl glass hover:bg-gradient-to-br ${metric.color} transition-all duration-500 hover:-translate-y-1 cursor-default border border-white/5 hover:border-white/10`}
+          >
+            <h3 className="text-gray-400 text-sm font-medium uppercase tracking-wider mb-2">
+              {metric.label}
+            </h3>
+            <div className="text-3xl font-bold text-white mb-1 group-hover:text-glow">
+              {metric.value}
             </div>
-            <style>{`
-        .metrics-section {
-          padding: 4rem 0;
-          background-color: var(--bg-primary);
-        }
-        .metrics-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 2rem;
-        }
-        .metric-card {
-          display: flex;
-          align-items: flex-start;
-          gap: 1.5rem;
-          padding: 2rem;
-        }
-        .metric-icon {
-          color: var(--accent);
-          background: rgba(20, 184, 166, 0.1);
-          padding: 1rem;
-          border-radius: var(--radius-md);
-        }
-        .metric-content h3 {
-          font-size: 1.1rem;
-          margin-bottom: 0.5rem;
-        }
-        .metric-value {
-          font-size: 2rem;
-          font-weight: 700;
-          color: var(--text-primary);
-          margin-bottom: 0.5rem;
-        }
-        .metric-content p {
-          color: var(--text-secondary);
-          font-size: 0.9rem;
-          line-height: 1.5;
-        }
-      `}</style>
-        </section>
-    );
+            <div className="text-xs text-gray-500 group-hover:text-gray-300">
+              {metric.change}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 };
 
 export default MetricsGrid;

@@ -1,70 +1,48 @@
-"use client";
-import React from 'react';
-import { BarChart3 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Navbar = () => {
-    return (
-        <nav className="navbar">
-            <div className="container navbar-content">
-                <div className="logo">
-                    <BarChart3 className="logo-icon" />
-                    <span className="logo-text">EcoData Visualizer</span>
-                </div>
-                <div className="nav-links">
-                    <Link href="#home">Home</Link>
-                    <Link href="#metrics">Data Metrics</Link>
-                    <Link href="#features">Features</Link>
-                </div>
-                <div className="nav-actions">
-                    <button className="btn btn-secondary btn-sm">Sign In</button>
-                </div>
-            </div>
-            <style jsx>{`
-        .navbar {
-          background-color: rgba(15, 23, 42, 0.8);
-          backdrop-filter: blur(10px);
-          border-bottom: 1px solid var(--border);
-          position: sticky;
-          top: 0;
-          z-index: 100;
-          padding: 1rem 0;
-        }
-        .navbar-content {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .logo {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-weight: 700;
-          font-size: 1.25rem;
-          color: var(--text-primary);
-        }
-        .logo-icon {
-          color: var(--primary);
-        }
-        .nav-links {
-          display: flex;
-          gap: 2rem;
-        }
-        .nav-links :global(a) {
-          color: var(--text-secondary);
-          font-size: 0.9rem;
-          font-weight: 500;
-        }
-        .nav-links :global(a:hover) {
-          color: var(--primary);
-        }
-        .btn-sm {
-          padding: 0.5rem 1rem;
-          font-size: 0.875rem;
-        }
-      `}</style>
-        </nav>
-    );
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="relative w-10 h-10">
+            <Image
+              src="/logo.png"
+              alt="ClimateFlow Logo"
+              fill
+              className="object-contain" // Changed from cover to contain to prevent cropping
+            />
+          </div>
+          <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 group-hover:from-primary group-hover:to-primary-dark transition-all duration-300">
+            ClimateFlow
+          </span>
+        </Link>
+
+        {/* Navigation */}
+        <div className="hidden md:flex items-center gap-8">
+          {['Home', 'Data Metrics', 'Features'].map((item) => (
+            <Link
+              key={item}
+              href={item === 'Features' ? '/features' : `#${item.toLowerCase().replace(' ', '-')}`}
+              className="text-sm font-medium text-gray-300 hover:text-primary transition-colors"
+            >
+              {item}
+            </Link>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <Link
+          href="#get-started"
+          className="px-5 py-2.5 text-sm font-semibold text-black bg-white hover:bg-gray-200 rounded-full transition-colors"
+        >
+          Get Started
+        </Link>
+      </div>
+    </nav>
+  );
 };
 
 export default Navbar;

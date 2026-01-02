@@ -1,74 +1,49 @@
-"use client";
-import React from 'react';
+import Link from 'next/link';
 
 const Footer = () => {
-    return (
-        <footer className="footer">
-            <div className="container footer-content">
-                <div className="footer-section">
-                    <h4>EcoData Visualizer</h4>
-                    <p>Empowering action through data.</p>
-                </div>
-                <div className="footer-section">
-                    <h5>Resources</h5>
-                    <a href="#">Documentation</a>
-                    <a href="#">API</a>
-                    <a href="#">Support</a>
-                </div>
-                <div className="footer-section">
-                    <h5>Legal</h5>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                </div>
-            </div>
-            <div className="container copyright">
-                <p>&copy; {new Date().getFullYear()} EcoData Visualizer. All rights reserved.</p>
-            </div>
-            <style jsx>{`
-        .footer {
-          background-color: var(--bg-secondary);
-          padding: 4rem 0 2rem;
-          margin-top: 4rem;
-          border-top: 1px solid var(--border);
-        }
-        .footer-content {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 2rem;
-          margin-bottom: 3rem;
-        }
-        .footer-section h4 {
-          margin-bottom: 1rem;
-          color: var(--primary);
-        }
-        .footer-section h5 {
-          margin-bottom: 1rem;
-          font-size: 1rem;
-          color: var(--text-primary);
-        }
-        .footer-section p {
-          color: var(--text-secondary);
-          font-size: 0.9rem;
-        }
-        .footer-section a {
-          display: block;
-          color: var(--text-secondary);
-          margin-bottom: 0.5rem;
-          font-size: 0.9rem;
-        }
-        .footer-section a:hover {
-          color: var(--primary);
-        }
-        .copyright {
-          text-align: center;
-          padding-top: 2rem;
-          border-top: 1px solid var(--border);
-          color: var(--text-secondary);
-          font-size: 0.875rem;
-        }
-      `}</style>
-        </footer>
-    );
+  return (
+    <footer className="py-20 border-t border-white/10 bg-black">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 text-sm">
+
+        {/* Brand */}
+        <div className="col-span-1 md:col-span-2">
+          <h3 className="text-xl font-bold text-white mb-4">ClimateFlow</h3>
+          <p className="text-gray-400 max-w-sm">
+            Empowering decisions with reliable climate data and insights.
+          </p>
+        </div>
+
+        {/* FAQs */}
+        <div>
+          <h4 className="font-semibold text-white mb-6 uppercase tracking-wider">FAQs</h4>
+          <ul className="space-y-4 text-gray-400">
+            <li><Link href="#" className="hover:text-primary transition-colors">What is EcoData?</Link></li>
+            <li><Link href="#" className="hover:text-primary transition-colors">How does it work?</Link></li>
+            <li><Link href="#" className="hover:text-primary transition-colors">Data Sources</Link></li>
+            <li><Link href="#" className="hover:text-primary transition-colors">Update Frequency</Link></li>
+          </ul>
+        </div>
+
+        {/* Contact */}
+        <div>
+          <h4 className="font-semibold text-white mb-6 uppercase tracking-wider">Contact</h4>
+          <ul className="space-y-4 text-gray-400">
+            <li><Link href="#" className="hover:text-primary transition-colors">Contact Form</Link></li>
+            <li><Link href="#" className="hover:text-primary transition-colors">Support</Link></li>
+            <li><Link href="#" className="hover:text-primary transition-colors">Partnerships</Link></li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+        <p>&copy; {new Date().getFullYear()} EcoData Visualizer. All rights reserved.</p>
+        <div className="flex gap-6 mt-4 md:mt-0">
+          <Link href="#" className="hover:text-white">Privacy Policy</Link>
+          <Link href="#" className="hover:text-white">Terms of Service</Link>
+        </div>
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;

@@ -1,62 +1,40 @@
-"use client";
-import React from 'react';
-import { ArrowRight, Lock } from 'lucide-react';
-
 const Hero = () => {
-    return (
-        <section className="hero">
-            <div className="container hero-content">
-                <h1 className="hero-title">
-                    Welcome to <span className="text-gradient">Climate Insights</span>
-                </h1>
-                <p className="hero-subtitle">
-                    Explore key indicators and insights on climate change.
-                    Visualize the data that matters most for our planet's future.
-                </p>
-                <div className="hero-actions">
-                    <button className="btn btn-primary">
-                        Explore Metrics <ArrowRight size={18} style={{ marginLeft: '0.5rem' }} />
-                    </button>
-                    <button className="btn btn-secondary">
-                        Request Access <Lock size={18} style={{ marginLeft: '0.5rem' }} />
-                    </button>
-                </div>
-            </div>
-            <style jsx>{`
-        .hero {
-          padding: 6rem 0 4rem;
-          text-align: center;
-          background: radial-gradient(circle at top center, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
-        }
-        .hero-title {
-          margin-bottom: 1.5rem;
-          font-size: 3.5rem;
-          letter-spacing: -0.02em;
-        }
-        .text-gradient {
-          background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        .hero-subtitle {
-          font-size: 1.25rem;
-          color: var(--text-secondary);
-          max-width: 600px;
-          margin: 0 auto 2.5rem;
-        }
-        .hero-actions {
-          display: flex;
-          justify-content: center;
-          gap: 1rem;
-        }
-        @media (max-width: 768px) {
-          .hero-title { font-size: 2.5rem; }
-          .hero-actions { flex-direction: column; align-items: center; }
-          .btn { width: 100%; max-width: 300px; }
-        }
-      `}</style>
-        </section>
-    );
+  return (
+    <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-20 overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 z-0 bg-hero-glow opacity-40 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* Content */}
+      <div className="relative z-10 max-w-4xl mx-auto space-y-8 animate-fade-in">
+        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white drop-shadow-lg">
+          Welcome to the <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400">
+            Climate Insights
+          </span>
+        </h1>
+
+        <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+          Explore key indicators and insights on climate change. Turning complex environmental data into clear, decision-ready stories.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
+          <button className="px-8 py-3 rounded-full border border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 backdrop-blur-sm">
+            Learn More
+          </button>
+          <button className="text-white hover:text-primary font-medium transition-colors">
+            Get Started &rarr;
+          </button>
+        </div>
+      </div>
+
+      <div className="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce">
+        <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </div>
+    </section>
+  );
 };
 
 export default Hero;
