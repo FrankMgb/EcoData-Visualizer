@@ -20,7 +20,7 @@ resource "aws_amplify_app" "climate_flow" {
           commands:
             - npm run build
       artifacts:
-        baseDirectory: .next
+        baseDirectory: out
         files:
           - '**/*'
       cache:
@@ -40,4 +40,20 @@ resource "aws_amplify_branch" "main" {
 
   framework = "Next.js - SSG"
   stage     = "PRODUCTION"
+}
+
+resource "aws_amplify_domain_association" "domain" {
+  app_id      = aws_amplify_app.climate_flow.id
+  domain_name = "climateflows.com"
+  wait_for_verification = false
+
+  sub_domain {
+    branch_name = aws_amplify_branch.main.branch_name
+    prefix      = ""
+  }
+
+  sub_domain {
+    branch_name = aws_amplify_branch.main.branch_name
+    prefix      = "www"
+  }
 }
