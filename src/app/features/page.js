@@ -1,5 +1,4 @@
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+
 import DataProviders from '@/components/DataProviders';
 
 export default function Features() {
@@ -44,7 +43,7 @@ export default function Features() {
 
     return (
         <main className="min-h-screen bg-black text-white selection:bg-primary/30">
-            <Navbar />
+
 
             {/* Hero Section */}
             <section className="relative pt-32 pb-20 px-6 border-b border-white/10">
@@ -91,7 +90,7 @@ export default function Features() {
             {/* Shared Data Providers Section */}
             <DataProviders />
 
-            <Footer />
+
         </main>
     );
 }
